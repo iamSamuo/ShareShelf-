@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book_social_network
+    username: postgres
+    password: Sammy0459
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: localhost
+    port: 1025
+    username: ""  # Remove username
+    password: ""  # Remove password
+    properties:
+      mail:
+        smtp:
+          auth: false  # MailDev does not require authentication
+          starttls.enable: false  # MailDev does not support TLS
+          trust: "*"
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+
+application:
+   security:
+        jwt:
+          secret-key: 4a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b
+          expiration: 86400000
+   mailing:
+    frontend:
+     activation-url: http://localhost:4200/activate-account
+file:
+    uploads:
+      photos-output-path: ./uploads
+server:
+  port: 8088
