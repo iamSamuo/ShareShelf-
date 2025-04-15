@@ -1,5 +1,6 @@
 package com.sammy.book_network.auth;
 
+import com.sammy.book_network.user.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -34,5 +35,4 @@ public class AuthenticationController {
     public void confirm(@RequestParam String token) throws MessagingException {
         service.activateAccount(token);
     }
-
 }

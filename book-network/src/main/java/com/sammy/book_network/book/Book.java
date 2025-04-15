@@ -4,10 +4,7 @@ import com.sammy.book_network.common.BaseEntity;
 import com.sammy.book_network.feedback.FeedBack;
 import com.sammy.book_network.history.BookTransactionHistory;
 import com.sammy.book_network.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Book extends BaseEntity {
     // inherit ID column from BaseEntity
-
     private String title;
     private String authorName;
     private String isbn;
@@ -33,7 +29,7 @@ public class Book extends BaseEntity {
     private boolean archived;
     private boolean sharable;
     // auditing columns will be obtained from BaseEntity and this class extends it (they are used to track changes that happen on a record on the DB )
-// book user relation
+    // book user relation
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
@@ -44,4 +40,15 @@ public class Book extends BaseEntity {
     @OneToMany(mappedBy = "book")
     private List<BookTransactionHistory> histories;
 
+    // this is used to mean that this field should not be mapped to the database.
+    @Transient
+    public double getRate() {
+        if (feedBacks != null || feedBacks.isEmpty()) {
+            return 0.0;
+        }
+        // use stream to allow sequential operations(map, filter, reduce).
+        var rate = this.feedBacks.stream().mapToDouble(FeedBack::getNote).average().orElse(0.0);
+        double roundedRate = Math.round(rate * 10.0) / 10.0;
+        return roundedRate;
+    }
 }
