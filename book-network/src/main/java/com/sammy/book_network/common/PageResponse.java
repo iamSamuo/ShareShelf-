@@ -9,8 +9,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageRespose<T> {
+public class PageResponse<T> {
     // actual book content
+    // a list of any type(this class can be re-used on all records that need to be)
     private List<T> content;
     //track which page number we are on
     private int number;

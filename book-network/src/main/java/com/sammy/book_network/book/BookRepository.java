@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 // JpaSpecificationExecutor allow building complex query using specification pattern
 // executes complex criteria based queries without using SQL
 public interface BookRepository extends JpaRepository<Book, Integer>, JpaSpecificationExecutor<Book> {
+    // to only show books that the user has not yet borrowed(ready for borrowing)
     @Query("""
             SELECT book
             FROM Book book

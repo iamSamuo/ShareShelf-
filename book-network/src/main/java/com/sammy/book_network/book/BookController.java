@@ -1,6 +1,6 @@
 package com.sammy.book_network.book;
 
-import com.sammy.book_network.common.PageRespose;
+import com.sammy.book_network.common.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class BookController {
     // find all the books(except the ones the connected user has)
     // implement the paging functionality
     @GetMapping()
-    public ResponseEntity<PageRespose<BookResponse>> getAllBooks(
+    public ResponseEntity<PageResponse<BookResponse>> getAllBooks(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false) int size,
             Authentication connectedUser
@@ -40,12 +40,41 @@ public class BookController {
 
     // get books by owner
     @GetMapping("/owner")
-    public ResponseEntity<PageRespose<BookResponse>> getAllBooksByOwner(
+    public ResponseEntity<PageResponse<BookResponse>> getAllBooksByOwner(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false) int size,
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(bookService.getAllBooksByOwner(page, size, connectedUser));
+    }
+
+    // get all borrowed books by user
+    @GetMapping("/borrowed")
+    public ResponseEntity<PageResponse<BorrowedBookResponse>> getAllBorrowedByOwner(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(bookService.getAllBorrowedByOwner(page, size, connectedUser));
+    }
+
+    // get all returned books
+    @GetMapping("/returned")
+    public ResponseEntity<PageResponse<BorrowedBookResponse>> getAllReturnedBooks(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(bookService.findAllReturnedBooks(page, size, connectedUser));
+    }
+
+    // update some fields of book (sharable)
+    @PatchMapping("/sharable/{book-id}")
+    public ResponseEntity<Integer> updateBorrowedBook(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.updateSharableStatus(bookId, connectedUser));
     }
 
     // find book by a specific id

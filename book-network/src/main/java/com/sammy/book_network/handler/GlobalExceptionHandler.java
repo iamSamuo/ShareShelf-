@@ -1,5 +1,6 @@
 package com.sammy.book_network.handler;
 
+import com.sammy.book_network.exception.OperationNotPermittedException;
 import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,6 +41,7 @@ public class GlobalExceptionHandler {
                         .error(exp.getMessage())
                         .build());
     }
+
     // bad credentials
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleException(BadCredentialsException exp) {
@@ -61,6 +63,7 @@ public class GlobalExceptionHandler {
                         .error(exp.getMessage())
                         .build());
     }
+
     // handle invalid exception within the application which might happen in places where we have @Valid annotation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleException(MethodArgumentNotValidException exp) {
@@ -85,6 +88,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                 .body(ExceptionResponse
                         .builder().businessErrorDescription("Internal error, please contact the admin")
+                        .error(exp.getMessage())
+                        .build());
+    }
+
+    // operation not permitted exception
+    // messaging exception when wrong user updates book status
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity<ExceptionResponse> handleException(OperationNotPermittedException exp) {
+        return ResponseEntity.status(BAD_REQUEST)
+                .body(ExceptionResponse
+                        .builder()
                         .error(exp.getMessage())
                         .build());
     }
