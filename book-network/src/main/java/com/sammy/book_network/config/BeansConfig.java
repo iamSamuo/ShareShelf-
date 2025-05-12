@@ -1,5 +1,8 @@
 package com.sammy.book_network.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,9 +55,10 @@ public class BeansConfig {
 
         return mailSender;
     }
+
     // always initialize applicationAuditAware
     @Bean
-    public AuditorAware<Integer> auditorAware(){
+    public AuditorAware<Integer> auditorAware() {
         return new ApplicationAuditAware();
     }
 
@@ -62,5 +66,21 @@ public class BeansConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
 
+    }
+
+    // swagger configuration
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Book Social Network API")
+                        .version("1.0")
+                        .description("API documentation for Book Social Network Application"))
+                .schemaRequirement("bearerAuth",
+                        new SecurityScheme()
+                                .name("bearerAuth")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT"));
     }
 }

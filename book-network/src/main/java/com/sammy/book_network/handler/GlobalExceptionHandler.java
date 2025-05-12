@@ -94,7 +94,7 @@ public class GlobalExceptionHandler {
 
     // operation not permitted exception
     // messaging exception when wrong user updates book status
-    @ExceptionHandler(MessagingException.class)
+    @ExceptionHandler(OperationNotPermittedException.class)
     public ResponseEntity<ExceptionResponse> handleException(OperationNotPermittedException exp) {
         return ResponseEntity.status(BAD_REQUEST)
                 .body(ExceptionResponse

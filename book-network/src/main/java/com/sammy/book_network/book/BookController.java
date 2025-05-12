@@ -1,12 +1,15 @@
 package com.sammy.book_network.book;
 
 import com.sammy.book_network.common.PageResponse;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.aspectj.ConfigurableObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("books")
@@ -17,6 +20,7 @@ public class BookController {
 
     private final BookService service;
     private final BookService bookService;
+    private final ConfigurableObject configurableObject;
 
     // save a book
     @PostMapping
@@ -36,6 +40,14 @@ public class BookController {
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(bookService.getAllBooks(page, size, connectedUser));
+    }
+
+    // find book by a specific id
+    @GetMapping("{book-id}")
+    public ResponseEntity<BookResponse> getBook(
+            @PathVariable("book-id")
+            Integer bookId) {
+        return ResponseEntity.ok(service.findById(bookId));
     }
 
     // get books by owner
@@ -68,21 +80,52 @@ public class BookController {
         return ResponseEntity.ok(bookService.findAllReturnedBooks(page, size, connectedUser));
     }
 
-    // update some fields of book (sharable)
+    // update book (sharable) status
     @PatchMapping("/sharable/{book-id}")
-    public ResponseEntity<Integer> updateBorrowedBook(
+    public ResponseEntity<Integer> updateSharableBook(
             @PathVariable("book-id") Integer bookId,
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(service.updateSharableStatus(bookId, connectedUser));
     }
 
-    // find book by a specific id
-    @GetMapping("{book-id}")
-    public ResponseEntity<BookResponse> getBook(
-            @PathVariable("book-id")
-            Integer bookId) {
-        return ResponseEntity.ok(service.findById(bookId));
+    // update book (archived) status
+    @PatchMapping("/archived/{book-id}")
+    public ResponseEntity<Integer> updateArchivedBook(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.updateArchivedStatus(bookId, connectedUser));
     }
+
+    // return borrowed book
+    @PatchMapping("/borrow/returned/{book-id}")
+    public ResponseEntity<Integer> returnBorrowedBook(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.returnBorrowedBook(bookId, connectedUser));
+    }
+
+    @PostMapping("/borrow/{book-id}")
+    public ResponseEntity<Integer> borrowBook(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser) {
+        return ResponseEntity.ok(service.borrowBook(bookId, connectedUser));
+
+    }
+
+    // update book cover(image)
+    @PostMapping(value = "/cover/{book-id}", consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadBookCoverPicture(
+            @PathVariable("book-id") Integer bookId,
+            @Parameter() //used by swagger,
+            Authentication connectedUser,
+            @RequestPart("file") MultipartFile file
+    ) {
+        service.uploadBookCoverPicture(file, connectedUser, bookId);
+        return ResponseEntity.accepted().build();
+    }
+
 
 }

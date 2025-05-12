@@ -25,7 +25,7 @@ public class Book extends BaseEntity {
     private String authorName;
     private String isbn;
     private String synopsis;
-    private String bookCover;
+    private String bookCover; // the file path to the uploaded picture.
     private boolean archived;
     private boolean sharable;
     // auditing columns will be obtained from BaseEntity and this class extends it (they are used to track changes that happen on a record on the DB )

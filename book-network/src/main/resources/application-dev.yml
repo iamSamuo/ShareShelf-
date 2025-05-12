@@ -29,6 +29,23 @@ spring:
         timeout: 3000
         writetimeout: 5000
 
+# Swagger Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    enabled: true
+    disable-swagger-default-url: true
+    display-request-duration: true
+    persist-authorization: true
+    filter: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  show-actuator: true
+
 application:
   security:
     jwt:
@@ -39,6 +56,6 @@ application:
       activation-url: http://localhost:4200/activate-account
 file:
   uploads:
-    photos-output-path: ./uploads
+    photos-output-path: ./uploads # default file path (works for all the environments)
 server:
   port: 8088

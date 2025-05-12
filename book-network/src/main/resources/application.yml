@@ -2,8 +2,8 @@ spring:
   profiles:
     active: dev
   servlet:
-    multipart:
-      max-file-size: 50MB
+    multipart: # configuring file uploads
+      max-file-size: 50MB # This sets the max file size to be uploaded
 springdoc:
   default-produces-media-type: application/json
 server:
