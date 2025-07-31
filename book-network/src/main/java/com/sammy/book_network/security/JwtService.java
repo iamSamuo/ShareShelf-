@@ -21,16 +21,18 @@ import java.util.stream.Collectors;
 @Service
 // It is used to mark a class as to contain business logic
 public class JwtService {
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
 
     // generate secure secret key
-    private static String generateRandomSecretKey() {
-        SecureRandom random = new SecureRandom();
-        byte[] key = new byte[32]; // 256-bit key
-        random.nextBytes(key);
-        return Base64.getEncoder().encodeToString(key);
-    }
+//    private static String generateRandomSecretKey() {
+//        SecureRandom random = new SecureRandom();
+//        byte[] key = new byte[32]; // 256-bit key
+//        random.nextBytes(key);
+//        return Base64.getEncoder().encodeToString(key);
+//    }
 
     // extract username from the token
     public String extractUsername(String token) {
@@ -52,12 +54,12 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-    // generate token
-    public String generatedToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-
-    }
+//
+//    // generate token
+//    public String generatedToken(UserDetails userDetails) {
+//        return generateToken(new HashMap<>(), userDetails);
+//
+//    }
 
     // Map is used instead there is need to include additional information within the jwt.
     public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
@@ -72,13 +74,15 @@ public class JwtService {
         var authorities = userDetails
                 .getAuthorities()
                 .stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis()))
-                .setIssuedAt(new Date(System.currentTimeMillis() + jwtExpiration))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .claim("authorities", authorities)
                 .signWith(getSignInKey())
                 .compact();
@@ -102,7 +106,7 @@ public class JwtService {
 
     // return decoded sign in Key
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(generateRandomSecretKey());
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

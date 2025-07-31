@@ -25,7 +25,7 @@ public class BookNetworkApplication {
     public CommandLineRunner runner(RoleRepository roleRepository) {
         return args -> {
             // make sure that when tha application is started, a default role of "USER"
-            // if created.
+            // is created.
             if (roleRepository.findByName("USER").isEmpty()) {
                 roleRepository.save(Role.builder().name("USER").build());
             }

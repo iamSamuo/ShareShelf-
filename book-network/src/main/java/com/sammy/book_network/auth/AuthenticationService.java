@@ -45,7 +45,6 @@ public class AuthenticationService {
         var userRole = roleRepository.findByName("USER")
                 // todo - better exception handling
                 .orElseThrow(() -> new IllegalStateException("Role User was not Initialized/Found"));
-
         // create a user Object and save it
         var user = User.builder().firstname(request.getFirstname()).lastname(request.getLastname()).email(request.getEmail()).password(passwordEncoder.encode(request.getPassword())).accountLocked(false).enabled(false).roles(Arrays.asList(userRole)).build();
 
@@ -85,7 +84,6 @@ public class AuthenticationService {
             codeBuilder.append(characters.charAt(randomIndex));
         }
         return codeBuilder.toString();
-
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {

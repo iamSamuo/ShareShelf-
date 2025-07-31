@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 @RestController
 @RequestMapping("books")
 @RequiredArgsConstructor
@@ -21,7 +20,6 @@ public class BookController {
     private final BookService service;
     private final BookService bookService;
     private final ConfigurableObject configurableObject;
-
     // save a book
     @PostMapping
     public ResponseEntity<Integer> saveBook(
@@ -30,7 +28,6 @@ public class BookController {
     ) {
         return ResponseEntity.ok(service.save(request, connectedUser));
     }
-
     // find all the books(except the ones the connected user has)
     // implement the paging functionality
     @GetMapping()
@@ -41,7 +38,6 @@ public class BookController {
     ) {
         return ResponseEntity.ok(bookService.getAllBooks(page, size, connectedUser));
     }
-
     // find book by a specific id
     @GetMapping("{book-id}")
     public ResponseEntity<BookResponse> getBook(

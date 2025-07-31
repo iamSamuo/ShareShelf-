@@ -43,9 +43,10 @@ public class Book extends BaseEntity {
     // this is used to mean that this field should not be mapped to the database.
     @Transient
     public double getRate() {
-        if (feedBacks != null || feedBacks.isEmpty()) {
+        if (feedBacks == null || feedBacks.isEmpty()) {
             return 0.0;
         }
+
         // use stream to allow sequential operations(map, filter, reduce).
         var rate = this.feedBacks.stream().mapToDouble(FeedBack::getNote).average().orElse(0.0);
         double roundedRate = Math.round(rate * 10.0) / 10.0;

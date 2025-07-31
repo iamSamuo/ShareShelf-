@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class BorrowedBookResponse {
-    //this is a combination of bookHistory and Book entity
+    // this is a combination of bookHistory and Book entity
     private int id;
     private String title;
     private String authorName;

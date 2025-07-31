@@ -27,8 +27,8 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookTransactionHistoryRepository bookTransactionHistoryRepository;
     private final FileStorageService fileStorageService;
-    private BookRepository bookRepository;
-    private BookTransactionHistoryRepository transactionHistoryRepository;
+    private final BookRepository bookRepository;
+    private final BookTransactionHistoryRepository transactionHistoryRepository;
 
     public Integer save(BookRequest request, Authentication connectedUser) {
         // this is the connected user(loggedIn User)

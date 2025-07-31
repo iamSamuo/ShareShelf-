@@ -1,5 +1,6 @@
 package com.sammy.book_network.book;
 
+import com.sammy.book_network.file.FileUtils;
 import com.sammy.book_network.history.BookTransactionHistory;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,8 @@ public class BookMapper {
                 .archived(book.isArchived())
                 .shareable(book.isSharable())
                 .owner(book.getOwner().fullName())
-//                .cover() // TODO: implement this later
+                .cover(FileUtils.readFileFromLocation(book.getBookCover())) // read a file from the location it was
+                // stored
                 .build();
     }
 

@@ -17,13 +17,13 @@ spring:
   mail:
     host: localhost
     port: 1025
-    username: ""  # Remove username
-    password: ""  # Remove password
+    username: ""
+    password: ""
     properties:
       mail:
         smtp:
-          auth: false  # MailDev does not require authentication
-          starttls.enable: false  # MailDev does not support TLS
+          auth: false
+          starttls.enable: false
           trust: "*"
         connectiontimeout: 5000
         timeout: 3000
@@ -32,13 +32,12 @@ spring:
 # Swagger Configuration
 springdoc:
   api-docs:
-    path: /api-docs
+    path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
     tags-sorter: alpha
     operations-sorter: alpha
     enabled: true
-    disable-swagger-default-url: true
     display-request-duration: true
     persist-authorization: true
     filter: true
@@ -56,6 +55,6 @@ application:
       activation-url: http://localhost:4200/activate-account
 file:
   uploads:
-    photos-output-path: ./uploads # default file path (works for all the environments)
+    photos-output-path: ./uploads
 server:
   port: 8088
